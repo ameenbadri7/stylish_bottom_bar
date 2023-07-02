@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide Badge;
 
+import '../stylish_bottom_bar.dart';
 import 'anim_nav/animated_nav_tiles.dart';
 import 'bubble_nav_bar/bubble_navigation_tile.dart';
 import 'helpers/cliper.dart';
@@ -461,9 +462,9 @@ class _StylishBottomBarState extends State<StylishBottomBar>
       list.insert(
         2,
         list.length > 3
-            ? Flex(
+            ? const Flex(
                 direction: Axis.horizontal,
-                children: const [Padding(padding: EdgeInsets.all(12))],
+                children: [Padding(padding: EdgeInsets.all(12))],
               )
             : const Spacer(
                 flex: 2,

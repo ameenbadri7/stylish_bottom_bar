@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart' hide Badge;
 
-import '../widgets/icon_widget.dart';
+import '../widgets/icon_widget.dart' as badge;
 import 'badge_positioned.dart';
 
 class Badge extends StatefulWidget {
@@ -8,12 +8,12 @@ class Badge extends StatefulWidget {
   final Color? badgeColor;
   final bool showBadge;
   final Widget? child;
-  final BadgeAnimationType? animationType;
+  final badge.BadgeAnimationType? animationType;
   final StackFit stackFit;
   final Alignment alignment;
   final BadgePosition? badgePosition;
   final bool ignorePointer;
-  final BadgeShape? badgeShape;
+  final badge.BadgeShape? badgeShape;
   final BorderSide borderSide;
   final double elevation;
   final BorderRadius borderRadius;
@@ -27,7 +27,7 @@ class Badge extends StatefulWidget {
     this.badgeColor = Colors.black,
     this.showBadge = true,
     this.child,
-    this.animationType = BadgeAnimationType.slide,
+    this.animationType = badge.BadgeAnimationType.slide,
     this.stackFit = StackFit.loose,
     this.alignment = Alignment.topRight,
     this.ignorePointer = false,
@@ -63,12 +63,12 @@ class _BadgeState extends State<Badge> with TickerProviderStateMixin {
       vsync: this,
     );
 
-    if (widget.animationType == BadgeAnimationType.slide) {
+    if (widget.animationType == badge.BadgeAnimationType.slide) {
       _animation = CurvedAnimation(
           parent: _animationController, curve: Curves.elasticOut);
-    } else if (widget.animationType == BadgeAnimationType.scale) {
+    } else if (widget.animationType == badge.BadgeAnimationType.scale) {
       _animation = _scaleTween.animate(_animationController);
-    } else if (widget.animationType == BadgeAnimationType.fade) {
+    } else if (widget.animationType == badge.BadgeAnimationType.fade) {
       _animation =
           CurvedAnimation(parent: _animationController, curve: Curves.easeIn);
     }
@@ -126,7 +126,7 @@ class _BadgeState extends State<Badge> with TickerProviderStateMixin {
   }
 
   Widget _getBadge() {
-    final border = widget.badgeShape == BadgeShape.circle
+    final border = widget.badgeShape == badge.BadgeShape.circle
         ? CircleBorder(side: widget.borderSide)
         : RoundedRectangleBorder(
             side: widget.borderSide,
@@ -150,17 +150,17 @@ class _BadgeState extends State<Badge> with TickerProviderStateMixin {
     }
 
     if (widget.toAnimate) {
-      if (widget.animationType == BadgeAnimationType.slide) {
+      if (widget.animationType == badge.BadgeAnimationType.slide) {
         return SlideTransition(
           position: _positionTween.animate(_animation),
           child: _badgeView(),
         );
-      } else if (widget.animationType == BadgeAnimationType.scale) {
+      } else if (widget.animationType == badge.BadgeAnimationType.scale) {
         return ScaleTransition(
           scale: _animation,
           child: _badgeView(),
         );
-      } else if (widget.animationType == BadgeAnimationType.fade) {
+      } else if (widget.animationType == badge.BadgeAnimationType.fade) {
         return FadeTransition(
           opacity: _animation,
           child: _badgeView(),
