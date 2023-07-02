@@ -1,21 +1,23 @@
 [![Hello](https://img.shields.io/badge/Hello-Sweet%20World-teal)](https://github.com/MarsadMaqsood) [![stylish_bottom_bar](https://img.shields.io/badge/Flutter-Stylish%20Bottom%20Bar-blueviolet)](https://pub.dev/packages/stylish_bottom_bar) [![Version](https://img.shields.io/pub/v/stylish_bottom_bar?color=%2354C92F&logo=dart)](https://pub.dev/packages/stylish_bottom_bar/install)
 
 
-A collection of stylish bottom navigation bars like animated bottom bar and bubble bottom bar for flutter.
+A collection of stylish bottom navigation bar like animated bottom bar and bubble bottom bar for flutter.
 
 
 ## Table of contents
 - [Installing](#installing)
 - [How To Use](#how_to_use)
 - [Showcase](#showcase)
-- [Migrate to 1.0.0](#migrate)
+- [Migrate to 0.0.7](#migrate)
 - [Example](#example)
+
+
 
 ## ⭐  Installing <a name="installing"></a>
 
     dependencies:
-        stylish_bottom_bar: ^1.0.3
-
+        stylish_bottom_bar: ^0.1.5
+        
 ## ⚡ Import
 
 ```dart
@@ -25,7 +27,6 @@ import 'package:stylish_bottom_bar/stylish_nav.dart';
 ## 📙 How To Use <a name="how_to_use"></a>
 ```dart
 items:
-option:
 backgroundColor:
 elevation:
 currentIndex:
@@ -49,9 +50,9 @@ selectedIcon:
 ## Properties
 
 ```dart
-items → List<BottomBarItem>
-option → AnimatedBarOptions
-option → BubbleBarOptions
+items → List<AnimatedBarItems>
+items → List<BubbleBarItem>
+items → List<dynamic>
 backgroundColor → Color
 elevation → double
 currentIndex → int
@@ -197,59 +198,66 @@ onTap: (index){
 
 <img src="https://github.com/MarsadMaqsood/stylish_bottom_bar/raw/master/showcase/13.gif?raw=true">
 
-## Migrate to 1.0.0 <a name="migrate"></a>
+## Migrate to 0.0.7 <a name="migrate"></a>
 
-`List<dynamic> items` is changed to `List<BottomBarItem> items`
+`AnimatedNavigationBar` and `BubbleNavigationBar` are merged into `StylishBottomBar`.
+From version **0.0.7** `StylishBottomBar` will be used to access the both bubble nav bar and animated nav bar.
 
-From version **1.0.0** `option:` `AnimatedBarOptions` and `BubbleBarOptions` will be used to change the bar items type and properties.
+`List<BubbleBarItem> items` and `List<AnimatedBarItems> items` is simplified into `List<dynamic> items`. You can assign `AnimatedBarItems` and `BubbleBarItem` to `items:` but not the both in same `items:`.
 
 ## Example <a name="example"></a>
 
 ```dart
 StylishBottomBar(
-//  option: AnimatedBarOptions(
-//    iconSize: 32,
-//    barAnimation: BarAnimation.liquid,
-//    iconStyle: IconStyle.animated,
-//    opacity: 0.3,
-//  ),
-  option: BubbleBarOptions(
-    barStyle: BubbleBarStyle.horizotnal,
-    // barStyle: BubbleBarStyle.vertical,
-    bubbleFillStyle: BubbleFillStyle.fill,
-    // bubbleFillStyle: BubbleFillStyle.outlined,
+    items: [
+        AnimatedBarItems(
+            icon: Icon(
+                Icons.home,
+            ),
+            selectedColor: Colors.deepPurple,
+            backgroundColor: Colors.amber,
+            title: Text('Home')),
+        AnimatedBarItems(
+            icon: Icon(
+                Icons.add_circle_outline,
+            ),
+            selectedColor: Colors.green,
+            backgroundColor: Colors.amber,
+          title: Text('Add')),
+      AnimatedBarItems(
+          icon: Icon(
+            Icons.person,
+          ),
+          backgroundColor: Colors.amber,
+          selectedColor: Colors.pinkAccent,
+          title: Text('Profile')),
+    // BubbleBarItem(icon: Icon(Icons.home), title: Text('Home')),
+    // BubbleBarItem(icon: Icon(Icons.add_circle_outline), title: Text('Add')),
+    // BubbleBarItem(icon: Icon(Icons.person), title: Text('Profile')),
+    
+    ],
+    
+    iconSize: 32,
+    barAnimation: BarAnimation.liquid,
+    // iconStyle: IconStyle.animated,
+    // iconStyle: IconStyle.simple,
+    hasNotch: true,
+    fabLocation: StylishBarFabLocation.end,
     opacity: 0.3,
-  ),
-  items: [
-    BottomBarItem(
-      icon: const Icon(Icons.abc),
-      title: const Text('Abc'),
-      backgroundColor: Colors.red,
-      selectedIcon: const Icon(Icons.read_more),
-    ),
-    BottomBarItem(
-      icon: const Icon(Icons.safety_divider),
-      title: const Text('Safety'),
-      backgroundColor: Colors.orange,
-    ),
-    BottomBarItem(
-      icon: const Icon(Icons.cabin),
-      title: const Text('Cabin'),
-      backgroundColor: Colors.purple,
-    ),
-  ],
-  fabLocation: StylishBarFabLocation.end,
-  hasNotch: true,
-  currentIndex: selected,
-  onTap: (index) {
-    setState(() {
-      selected = index;
-      controller.jumpToPage(index);
-    });
-  },
-)
+    currentIndex: selected ?? 0,
+    
+    //Bubble bar specific style properties
+    //unselectedIconColor: Colors.grey,
+    //barStyle: BubbleBarStyle.horizotnal,
+    //bubbleFillStyle: BubbleFillStyle.fill,
+    
+    onTap: (index) {
+        setState(() {
+            selected = index;
+        });
+    },
+    
+  );
 
 ```
 
-
-Contributions and pull requests are welcome! We value your input and appreciate any improvements or suggestions you can provide. Feel free to submit a pull request with your changes. Don't forget to star the repository if you find it useful. Thank you for your collaboration!

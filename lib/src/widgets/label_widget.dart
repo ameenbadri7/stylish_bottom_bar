@@ -1,16 +1,18 @@
-import 'package:flutter/material.dart';
-import 'package:stylish_bottom_bar/helpers/constant.dart';
-import 'package:stylish_bottom_bar/model/bar_items.dart';
+import 'package:flutter/material.dart' hide Badge
+import '../helpers/constant.dart';
+import '../model/bubble_item.dart';
 
 class LabelWidget extends StatelessWidget {
   const LabelWidget({
-    super.key,
+    Key? key,
     required this.animation,
     required this.item,
-  });
+    required this.color,
+  }) : super(key: key);
 
   final Animation<double> animation;
-  final BottomBarItem item;
+  final BubbleBarItem item;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class LabelWidget extends StatelessWidget {
           style: TextStyle(
             fontSize: activeFontSize,
             fontWeight: FontWeight.w600,
-            color: item.backgroundColor ?? item.selectedColor,
+            color: color,
           ),
           child: item.title!,
         ),

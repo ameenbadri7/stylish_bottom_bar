@@ -1,15 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:stylish_bottom_bar/helpers/constant.dart';
-import 'package:stylish_bottom_bar/helpers/enums.dart';
-import 'package:stylish_bottom_bar/model/bar_items.dart';
+import 'package:flutter/material.dart' hide Badge
+import 'package:stylish_bottom_bar/src/helpers/constant.dart';
+import 'package:stylish_bottom_bar/src/helpers/enums.dart';
 import 'package:stylish_bottom_bar/src/water_drop/water_drop.dart';
+import '../model/animated_nav_items.dart';
 
 class AnimatedNavigationTiles extends StatelessWidget {
   const AnimatedNavigationTiles(
     this.items,
-    this.iconSize, {
-    super.key,
-    this.padding,
+    this.iconSize,
+    this.padding, {
+    Key? key,
     this.onTap,
     this.inkEffect,
     this.inkColor,
@@ -20,10 +20,9 @@ class AnimatedNavigationTiles extends StatelessWidget {
     this.indexLabel,
     required this.barAnimation,
     required this.iconStyle,
-  });
+  }) : super(key: key);
 
-  // final AnimatedBarItems items;
-  final BottomBarItem items;
+  final AnimatedBarItems items;
 
   ///Icon size
   final double iconSize;
@@ -34,7 +33,7 @@ class AnimatedNavigationTiles extends StatelessWidget {
   final bool? inkEffect;
   final Color? inkColor;
   final bool selected;
-  final EdgeInsets? padding;
+  final EdgeInsets padding;
 
   ///Background color opacity
   final double opacity;
@@ -56,73 +55,55 @@ class AnimatedNavigationTiles extends StatelessWidget {
         container: true,
         header: true,
         selected: selected,
-        child: Padding(
-          padding: padding ??
-              (items.showBadge && iconStyle != IconStyle.simple
-                  ? const EdgeInsets.only(
-                      top: 6.0,
-                    )
-                  : EdgeInsets.zero),
-          child: Badge(
-            label: items.badge,
-            isLabelVisible: items.showBadge,
-            backgroundColor: items.badgeColor,
-            padding: items.badgePadding,
-            child: InkWell(
-              onTap: onTap,
-              splashColor: inkEffect! ? inkColor : Colors.transparent,
-              highlightColor: Colors.transparent,
-              borderRadius: const BorderRadius.horizontal(
-                right: Radius.circular(52),
-                left: Radius.circular(52),
-              ),
-              // child: SizedBox(
-              // height: iconSize <= 26 ? 48 : 48 + (iconSize - 26),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: selected
-                    ? barAnimation == BarAnimation.liquid
-                        ? MainAxisAlignment.spaceBetween
-                        : MainAxisAlignment.spaceEvenly
-                    : MainAxisAlignment.center,
-                children: _getBarItems(),
+        child: Stack(
+          children: [
+            Padding(
+              padding: padding,
+              child: InkWell(
+                onTap: onTap,
+                splashColor: inkEffect! ? inkColor : Colors.transparent,
+                highlightColor: Colors.transparent,
+                borderRadius: const BorderRadius.horizontal(
+                  right: Radius.circular(52),
+                  left: Radius.circular(52),
+                ),
+                // child: SizedBox(
+                // height: iconSize <= 26 ? 48 : 48 + (iconSize - 26),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: selected
+                      ? barAnimation == BarAnimation.liquid
+                          ? MainAxisAlignment.spaceBetween
+                          : MainAxisAlignment.spaceEvenly
+                      : MainAxisAlignment.center,
+                  children: barAnimation == BarAnimation.liquid
+                      ? _liquidItems()
+                      : barAnimation == BarAnimation.drop
+                          ? _dropItems()
+                          : _childItems(),
+                ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );
   }
 
-  List<Widget> _getBarItems() {
-    if (barAnimation == BarAnimation.liquid) {
-      return _liquidItems();
-    } else if (barAnimation == BarAnimation.drop) {
-      return _dropItems();
-    } else {
-      return _childItems();
-    }
-  }
-
-  Color get itemColor =>
-      items.backgroundColor ??
-      (selected ? items.selectedColor : items.unSelectedColor);
-  Color get itemColorOnSelected => items.backgroundColor ?? items.selectedColor;
-
-  List<Widget> _defaultItems() {
+  _defaultItems() {
     var label = LabelWidget(
       iconStyle: iconStyle,
       animation: animation!,
       item: items,
-      color: itemColor,
+      color: selected ? items.selectedColor : items.unSelectedColor,
     );
     return [
       Container(
         alignment: Alignment.center,
         child: IconTheme(
           data: IconThemeData(
-            color: itemColor,
+            color: selected ? items.selectedColor : items.unSelectedColor,
             size: iconSize,
             // size: selected ? iconSize + 4 : iconSize,
           ),
@@ -135,14 +116,14 @@ class AnimatedNavigationTiles extends StatelessWidget {
     ];
   }
 
-  List<Widget> _liquidItems() {
+  _liquidItems() {
     var label = LabelWidget(
-      iconStyle: iconStyle,
-      animation: animation!,
-      item: items,
-      color: itemColorOnSelected,
-    );
+        iconStyle: iconStyle,
+        animation: animation!,
+        item: items,
+        color: items.selectedColor);
     return [
+      // const Spacer(),
       AnimatedCrossFade(
         firstChild: Padding(
           padding: const EdgeInsets.all(6.0),
@@ -152,7 +133,7 @@ class AnimatedNavigationTiles extends StatelessWidget {
           alignment: Alignment.center,
           child: IconTheme(
             data: IconThemeData(
-              color: itemColor,
+              color: selected ? items.selectedColor : items.unSelectedColor,
               size: iconSize,
             ),
             child: selected && items.selectedIcon != null
@@ -167,13 +148,14 @@ class AnimatedNavigationTiles extends StatelessWidget {
         crossFadeState:
             selected ? CrossFadeState.showFirst : CrossFadeState.showSecond,
       ),
+      // const Spacer(),
       AnimatedCrossFade(
         firstChild: Container(),
         secondChild: Container(
           height: 20,
           width: 22,
           decoration: BoxDecoration(
-            color: itemColorOnSelected,
+            color: items.selectedColor,
             borderRadius: const BorderRadius.only(
               topLeft: Radius.elliptical(12, 20),
               topRight: Radius.elliptical(12, 20),
@@ -190,13 +172,12 @@ class AnimatedNavigationTiles extends StatelessWidget {
     ];
   }
 
-  List<Widget> _childItems() {
+  _childItems() {
     var label = LabelWidget(
-      iconStyle: iconStyle,
-      animation: animation!,
-      item: items,
-      color: itemColorOnSelected,
-    );
+        iconStyle: iconStyle,
+        animation: animation!,
+        item: items,
+        color: items.selectedColor);
 
     return iconStyle == IconStyle.Default
         ? _defaultItems()
@@ -226,7 +207,9 @@ class AnimatedNavigationTiles extends StatelessWidget {
                   alignment: Alignment.center,
                   child: IconTheme(
                     data: IconThemeData(
-                      color: itemColor,
+                      color: selected
+                          ? items.selectedColor
+                          : items.unSelectedColor,
                       size: selected ? iconSize + 4 : iconSize,
                     ),
                     child: selected && items.selectedIcon != null
@@ -237,14 +220,14 @@ class AnimatedNavigationTiles extends StatelessWidget {
               ];
   }
 
-  List<Widget> _dropItems() {
+  _dropItems() {
     return [
       AnimatedCrossFade(
         firstChild: Container(
           alignment: Alignment.center,
           child: IconTheme(
             data: IconThemeData(
-              color: itemColor,
+              color: selected ? items.selectedColor : items.unSelectedColor,
               size: iconSize,
             ),
             child: selected && items.selectedIcon != null
@@ -263,7 +246,7 @@ class AnimatedNavigationTiles extends StatelessWidget {
               padding: const EdgeInsets.all(12),
               child: IconTheme(
                 data: IconThemeData(
-                  color: itemColor,
+                  color: selected ? items.selectedColor : items.unSelectedColor,
                   size: iconSize,
                 ),
                 child: selected && items.selectedIcon != null
@@ -294,8 +277,7 @@ class LabelWidget extends StatelessWidget {
   }) : super(key: key);
 
   final Animation<double> animation;
-  // final AnimatedBarItems item;
-  final BottomBarItem item;
+  final AnimatedBarItems item;
   final Color color;
   final IconStyle iconStyle;
 
@@ -339,8 +321,7 @@ class IconWidget extends StatefulWidget {
       required this.iconSize,
       required this.barAnimation})
       : super(key: key);
-  // final AnimatedBarItems items;
-  final BottomBarItem items;
+  final AnimatedBarItems items;
   final bool selected;
   final double iconSize;
   final BarAnimation barAnimation;
@@ -351,7 +332,7 @@ class IconWidget extends StatefulWidget {
 
 class _IconWidgetState extends State<IconWidget>
     with SingleTickerProviderStateMixin {
-  AnimationController? controller;
+  late AnimationController controller;
   late Animation<Color?> animationColor;
   late Animation<double> animation;
 
@@ -359,10 +340,6 @@ class _IconWidgetState extends State<IconWidget>
   void initState() {
     super.initState();
 
-    _init();
-  }
-
-  void _init() {
     if (widget.barAnimation != BarAnimation.transform3D) {
       controller = AnimationController(
         duration: const Duration(milliseconds: 300),
@@ -370,45 +347,37 @@ class _IconWidgetState extends State<IconWidget>
         vsync: this,
       );
     }
-    _assignAnimation();
   }
 
   @override
   void dispose() {
-    if (widget.barAnimation != BarAnimation.transform3D) controller?.dispose();
+    if (widget.barAnimation != BarAnimation.transform3D) controller.dispose();
     super.dispose();
   }
 
   _assignAnimation() {
     if (widget.barAnimation != BarAnimation.transform3D) {
       if (widget.barAnimation == BarAnimation.blink) {
-        animation =
-            CurvedAnimation(parent: controller!, curve: Curves.bounceIn);
+        animation = CurvedAnimation(parent: controller, curve: Curves.bounceIn);
       } else {
-        animation = CurvedAnimation(parent: controller!, curve: Curves.ease);
+        animation = CurvedAnimation(parent: controller, curve: Curves.ease);
       }
 
       animationColor = ColorTween(
-        begin: widget.items.backgroundColor ?? widget.items.unSelectedColor,
+        begin: widget.items.unSelectedColor,
         end: widget.items.selectedColor,
       ).animate(animation)
         ..addListener(() {
-          setState(() {});
+          // setState(() {});
         });
-    }
-  }
 
-  _playAnimation() {
-    if (widget.barAnimation != BarAnimation.transform3D) {
-      widget.selected ? controller?.forward() : controller?.reset();
+      widget.selected ? controller.forward() : controller.reset();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (controller == null) _init();
-    // _assignAnimation();
-    _playAnimation();
+    _assignAnimation();
 
     return _buildWidget();
   }
@@ -416,12 +385,11 @@ class _IconWidgetState extends State<IconWidget>
   _buildWidget() {
     return IconTheme(
       data: IconThemeData(
-        color: widget.items.backgroundColor ??
-            (widget.selected
-                ? widget.barAnimation == BarAnimation.transform3D
-                    ? widget.items.selectedColor
-                    : animationColor.value
-                : widget.items.unSelectedColor),
+        color: widget.selected
+            ? widget.barAnimation == BarAnimation.transform3D
+                ? widget.items.selectedColor
+                : animationColor.value
+            : widget.items.unSelectedColor,
         size: widget.selected ? widget.iconSize + 4 : widget.iconSize,
       ),
       child: widget.selected

@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:stylish_bottom_bar/model/bar_items.dart';
+import 'package:flutter/material.dart' hide Badge
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 
 void main() {
@@ -8,7 +7,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -18,14 +17,16 @@ class MyApp extends StatelessWidget {
         // useMaterial3: true,
         primarySwatch: Colors.green,
       ),
-      home: const BubbelBarExample(),
-      // home: const AnimatedBarExample(),
+      // home: const BubbelBarExample(),
+      home: const AnimatedBarExample(),
     );
   }
 }
 
 class AnimatedBarExample extends StatefulWidget {
-  const AnimatedBarExample({super.key});
+  const AnimatedBarExample({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<AnimatedBarExample> createState() => _AnimatedBarExampleState();
@@ -52,35 +53,22 @@ class _AnimatedBarExampleState extends State<AnimatedBarExample> {
       // resizeToAvoidBottomInset: false,
 
       bottomNavigationBar: StylishBottomBar(
-        option: AnimatedBarOptions(
-          // iconSize: 32,
-          barAnimation: BarAnimation.fade,
-          iconStyle: IconStyle.animated,
-          // opacity: 0.3,
-        ),
         items: [
-          BottomBarItem(
-            icon: const Icon(
-              Icons.house_outlined,
-            ),
-            selectedIcon: const Icon(Icons.house_rounded),
-            // selectedColor: Colors.teal,
-            backgroundColor: Colors.teal,
-            title: const Text('Home'),
-            badge: const Text('9+'),
-            showBadge: true,
-            badgeColor: Colors.purple,
-            badgePadding: const EdgeInsets.only(left: 4, right: 4),
-          ),
-          BottomBarItem(
-            icon: const Icon(Icons.star_border_rounded),
-            selectedIcon: const Icon(Icons.star_rounded),
-            selectedColor: Colors.red,
-            // unSelectedColor: Colors.purple,
-            // backgroundColor: Colors.orange,
-            title: const Text('Star'),
-          ),
-          BottomBarItem(
+          AnimatedBarItems(
+              icon: const Icon(
+                Icons.house_outlined,
+              ),
+              selectedIcon: const Icon(Icons.house_rounded),
+              selectedColor: Colors.teal,
+              backgroundColor: Colors.tealAccent,
+              title: const Text('Home')),
+          AnimatedBarItems(
+              icon: const Icon(Icons.star_border_rounded),
+              selectedIcon: const Icon(Icons.star_rounded),
+              selectedColor: Colors.green,
+              backgroundColor: Colors.lightGreenAccent,
+              title: const Text('Star')),
+          AnimatedBarItems(
               icon: const Icon(
                 Icons.style_outlined,
               ),
@@ -90,7 +78,7 @@ class _AnimatedBarExampleState extends State<AnimatedBarExample> {
               backgroundColor: Colors.amber,
               selectedColor: Colors.deepOrangeAccent,
               title: const Text('Style')),
-          BottomBarItem(
+          AnimatedBarItems(
               icon: const Icon(
                 Icons.person_outline,
               ),
@@ -101,11 +89,15 @@ class _AnimatedBarExampleState extends State<AnimatedBarExample> {
               selectedColor: Colors.deepPurple,
               title: const Text('Profile')),
         ],
+        iconSize: 32,
+        barAnimation: BarAnimation.drop,
+        iconStyle: IconStyle.animated,
         hasNotch: true,
-        fabLocation: StylishBarFabLocation.center,
+        fabLocation: StylishBarFabLocation.end,
+        opacity: 0.3,
         currentIndex: selected ?? 0,
         onTap: (index) {
-          controller.jumpToPage(index);
+          controller.jumpToPage(index!);
           setState(() {
             selected = index;
           });
@@ -123,7 +115,7 @@ class _AnimatedBarExampleState extends State<AnimatedBarExample> {
           color: Colors.red,
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       body: SafeArea(
         child: PageView(
           controller: controller,
@@ -142,7 +134,7 @@ class _AnimatedBarExampleState extends State<AnimatedBarExample> {
 //
 //Example to setup Bubble Bottom Bar with PageView
 class BubbelBarExample extends StatefulWidget {
-  const BubbelBarExample({super.key});
+  const BubbelBarExample({Key? key}) : super(key: key);
 
   @override
   State<BubbelBarExample> createState() => _BubbelBarExampleState();
@@ -170,52 +162,41 @@ class _BubbelBarExampleState extends State<BubbelBarExample> {
         ],
       ),
       bottomNavigationBar: StylishBottomBar(
-        option: BubbleBarOptions(
-          // barStyle: BubbleBarStyle.vertical,
-          barStyle: BubbleBarStyle.horizontal,
-          bubbleFillStyle: BubbleFillStyle.fill,
-          // bubbleFillStyle: BubbleFillStyle.outlined,
-          opacity: 0.3,
-        ),
         items: [
-          BottomBarItem(
+          BubbleBarItem(
             icon: const Icon(Icons.abc),
             title: const Text('Abc'),
-            backgroundColor: Colors.red,
-
-            // selectedColor: Colors.pink,
-            selectedIcon: const Icon(Icons.read_more),
-            badge: const Text('1+'),
-            badgeColor: Colors.red,
-            showBadge: true,
           ),
-          BottomBarItem(
+          BubbleBarItem(
             icon: const Icon(Icons.safety_divider),
             title: const Text('Safety'),
-            selectedColor: Colors.orange,
-            backgroundColor: Colors.orange,
           ),
-          BottomBarItem(
+          BubbleBarItem(
             icon: const Icon(Icons.cabin),
             title: const Text('Cabin'),
-            backgroundColor: Colors.purple,
           ),
         ],
-        // fabLocation: StylishBarFabLocation.end,
-        // hasNotch: true,
+        fabLocation: StylishBarFabLocation.end,
+        hasNotch: true,
+        // iconSize: 32,
+        barStyle: BubbleBarStyle.horizotnal,
+        // barStyle: BubbleBarStyle.vertical,
+        bubbleFillStyle: BubbleFillStyle.fill,
+        // bubbleFillStyle: BubbleFillStyle.outlined,
+        opacity: 0.3,
         currentIndex: selected,
         onTap: (index) {
           setState(() {
-            selected = index;
+            selected = index!;
             controller.jumpToPage(index);
           });
         },
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {},
-      //   child: const Icon(Icons.emoji_emotions),
-      // ),
-      // floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(Icons.emoji_emotions),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 }

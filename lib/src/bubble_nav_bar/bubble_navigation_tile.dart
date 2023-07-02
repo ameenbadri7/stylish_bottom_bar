@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:stylish_bottom_bar/helpers/enums.dart';
-import 'package:stylish_bottom_bar/model/bar_items.dart';
-import 'package:stylish_bottom_bar/src/widgets/icon_widget.dart';
-import 'package:stylish_bottom_bar/src/widgets/label_widget.dart';
+import 'package:flutter/material.dart' hide Badge
+import 'package:stylish_bottom_bar/src/helpers/enums.dart';
+import '../model/bubble_item.dart';
+import '../widgets/icon_widget.dart';
+import '../widgets/label_widget.dart';
 
 class BubbleNavigationTile extends StatelessWidget {
   const BubbleNavigationTile(
@@ -12,24 +12,22 @@ class BubbleNavigationTile extends StatelessWidget {
     this.iconSize,
     this.unselectedIconColor,
     this.barStyle, {
-    super.key,
+    Key? key,
     this.onTap,
-    required this.flex,
+    this.flex,
     this.selected = false,
     this.indexLabel,
     this.ink = false,
     this.inkColor = Colors.grey,
     this.padding,
     this.fillStyle,
-    required this.itemBorderRadius,
-  });
+  }) : super(key: key);
 
-  // final BubbleBarItem item;
-  final BottomBarItem item;
+  final BubbleBarItem item;
   final Animation<double> animation;
   final double iconSize;
   final VoidCallback? onTap;
-  final double flex;
+  final double? flex;
   final bool selected;
   final String? indexLabel;
   final double opacity;
@@ -39,27 +37,21 @@ class BubbleNavigationTile extends StatelessWidget {
   final EdgeInsets? padding;
   final BubbleBarStyle? barStyle;
   final BubbleFillStyle? fillStyle;
-  final BorderRadius? itemBorderRadius;
 
   @override
   Widget build(BuildContext context) {
     ///flex size
-    var flexSize = (flex * 1000.0).round();
+    var flexSize = (flex! * 1000.0).round();
 
     ///Label Widget
     var label = LabelWidget(
       animation: animation,
       item: item,
-      // color: item.backgroundColor,
+      color: item.backgroundColor!,
     );
 
     var outlined = selected && fillStyle == BubbleFillStyle.outlined;
     var fill = selected && fillStyle == BubbleFillStyle.fill;
-    final height = barStyle == BubbleBarStyle.horizontal
-        ? 48.0
-        : iconSize > 30.0 //decreased to 30 from 32
-            ? 50.0 + (iconSize - 30.0) //decreased to 30 from 32
-            : 50.0;
 
     return Expanded(
       flex: flexSize,
@@ -73,31 +65,34 @@ class BubbleNavigationTile extends StatelessWidget {
               padding: padding!,
               child: InkWell(
                 onTap: onTap,
-                borderRadius: itemBorderRadius ??
-                    const BorderRadius.horizontal(
-                      right: Radius.circular(52),
-                      left: Radius.circular(52),
-                    ),
+                borderRadius: const BorderRadius.horizontal(
+                  right: Radius.circular(52),
+                  left: Radius.circular(52),
+                ),
                 highlightColor: Colors.transparent,
                 splashColor: ink ? inkColor : Colors.transparent,
                 child: Container(
                   // height: 48,
-                  height: height,
+                  height: barStyle == BubbleBarStyle.horizotnal
+                      ? 48
+                      : iconSize > 30 //decreased to 30 from 32
+                          ? 50 + (iconSize - 30) //decreased to 30 from 32
+                          : 50,
+
                   decoration: BoxDecoration(
-                    borderRadius: itemBorderRadius ??
-                        const BorderRadius.horizontal(
-                          right: Radius.circular(52),
-                          left: Radius.circular(52),
-                        ),
+                    borderRadius: const BorderRadius.horizontal(
+                      right: Radius.circular(52),
+                      left: Radius.circular(52),
+                    ),
                     border: Border.all(
                         width: outlined ? 1 : 0,
-                        color: item.borderColor,
+                        color: item.borderColor!,
                         style: outlined ? BorderStyle.solid : BorderStyle.none),
                     color: fill
-                        ? item.backgroundColor?.withOpacity(opacity)
+                        ? item.backgroundColor!.withOpacity(opacity)
                         : Colors.transparent,
                   ),
-                  child: barStyle == BubbleBarStyle.horizontal
+                  child: barStyle == BubbleBarStyle.horizotnal
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
 
@@ -105,10 +100,7 @@ class BubbleNavigationTile extends StatelessWidget {
                           mainAxisAlignment: selected
                               ? MainAxisAlignment.spaceEvenly
                               : MainAxisAlignment.center,
-                          // children: items(label),
-                          children: items(label).map((child) {
-                            return selected ? Expanded(child: child) : child;
-                          }).toList(),
+                          children: items(label),
                         )
                       : Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -131,7 +123,7 @@ class BubbleNavigationTile extends StatelessWidget {
     );
   }
 
-  List<Widget> items(label) {
+  items(label) {
     return [
       IconWidget(
         animation: animation,

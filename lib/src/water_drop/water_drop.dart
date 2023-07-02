@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Badge
 import 'package:flutter/scheduler.dart';
 
 class WaterDrop extends StatefulWidget {
@@ -8,18 +8,18 @@ class WaterDrop extends StatefulWidget {
   final Widget child;
 
   const WaterDrop({
-    super.key,
+    Key? key,
     required this.size,
     required this.child,
     required this.top,
     required this.left,
-  });
+  }) : super(key: key);
 
   @override
-  State<WaterDrop> createState() => _WaterDropState();
+  State<WaterDrop> createState() => __WaterDropState();
 }
 
-class _WaterDropState extends State<WaterDrop> {
+class __WaterDropState extends State<WaterDrop> {
   // Size of the child widget, needed to provide gradient on the drop.
   Size? totalSize;
 
@@ -28,13 +28,12 @@ class _WaterDropState extends State<WaterDrop> {
     /// Rebuild the widget if [totalSize] is null
     if (totalSize == null) {
       SchedulerBinding.instance.addPostFrameCallback((_) {
-        if (context.size != null) {
-          setState(() => totalSize = context.size);
-        }
+        setState(() => totalSize = context.size!);
       });
     }
 
     final size = totalSize ?? MediaQuery.of(context).size;
+
     final alignment = getAlignment(size);
 
     //used for determining alignments for gradient
@@ -121,7 +120,8 @@ class _OvalClipper extends CustomClipper<Path> {
 class _LightDot extends StatelessWidget {
   final double width, height;
 
-  const _LightDot({required this.width, required this.height});
+  const _LightDot({Key? key, required this.width, required this.height})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -149,7 +149,8 @@ class _OvalShadow extends StatelessWidget {
   final double width;
   final double height;
 
-  const _OvalShadow({required this.width, required this.height});
+  const _OvalShadow({Key? key, required this.width, required this.height})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

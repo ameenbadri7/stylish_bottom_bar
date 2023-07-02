@@ -5,7 +5,7 @@ enum BarAnimation {
   blink,
   transform3D,
 
-  ///Add's liquid type effect on icon hides when clicked
+  ///Adds liquid type effect on icon hides when clicked
   /// and a rectangular shape with circle radius is appeared with the title
   ///
   /// This animation is not yet fully customized
@@ -32,7 +32,7 @@ enum BubbleBarStyle {
   vertical,
 
   ///Align bubble bar items horizontally
-  horizontal
+  horizotnal
 }
 
 enum BubbleFillStyle {

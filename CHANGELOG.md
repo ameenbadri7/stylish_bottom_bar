@@ -1,19 +1,3 @@
-## 1.0.3
-- Fix: badge display issue when using `AnimatedBarOptions`
-- Removed unnecessary code
-
-## 1.0.2
-- Fix: [#11](https://github.com/MarsadMaqsood/stylish_bottom_bar/issues/11)
-
-## 1.0.1
-- Fix: background color is not changing issue [#10](https://github.com/MarsadMaqsood/stylish_bottom_bar/issues/10)
-- Fix: Bug fixes
-
-## 1.0.0
-- Changed: `items: List<dynamic>` to `List<BottomBarItem>`
-- Added: `option:` `BubbleBarOptions` and `AnimatedBarOptions`
-- Fix: Flutter 3.7 compatibility issue [#8](https://github.com/MarsadMaqsood/stylish_bottom_bar/issues/8). Thanks to PR [#7](https://github.com/MarsadMaqsood/stylish_bottom_bar/pull/7)
-
 ## 0.1.5
 - Fix: issue [#5](https://github.com/MarsadMaqsood/stylish_bottom_bar/issues/5) where hover effect is not working properly
 
