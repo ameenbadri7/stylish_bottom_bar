@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide Badge;;
+import 'package:flutter/material.dart' hide Badge;
 
 class BubbleBarItem {
   final Widget icon;
