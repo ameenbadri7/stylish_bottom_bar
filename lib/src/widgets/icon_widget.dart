@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide Badge;
+import 'package:flutter/material.dart' hide Badge;;
 import 'package:stylish_bottom_bar/src/badge/badge.dart';
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 

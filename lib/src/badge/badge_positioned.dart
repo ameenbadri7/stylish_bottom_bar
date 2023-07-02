@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide Badge
+import 'package:flutter/material.dart' hide Badge;
 
 class BadgePositioned extends StatelessWidget {
   /// This specify a badge position according to [child]

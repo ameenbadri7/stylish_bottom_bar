@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart' hide Badge
+import 'package:flutter/material.dart' hide Badge;
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 
 void main() {

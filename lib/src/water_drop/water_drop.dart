@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide Badge
+import 'package:flutter/material.dart' hide Badge;
 import 'package:flutter/scheduler.dart';
 
 class WaterDrop extends StatefulWidget {

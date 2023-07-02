@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart' hide Badge
+import 'package:flutter/material.dart' hide Badge;
 
-import '../stylish_bottom_bar.dart';
 import 'anim_nav/animated_nav_tiles.dart';
 import 'bubble_nav_bar/bubble_navigation_tile.dart';
 import 'helpers/cliper.dart';

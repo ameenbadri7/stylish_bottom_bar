@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide Badge
+import 'package:flutter/material.dart' hide Badge;
 import 'package:stylish_bottom_bar/src/helpers/constant.dart';
 import 'package:stylish_bottom_bar/src/helpers/enums.dart';
 import 'package:stylish_bottom_bar/src/water_drop/water_drop.dart';
